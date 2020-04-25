@@ -51,7 +51,7 @@ mainScene.create = function() {
     
     // CONFIGURANDO O HERO //
 
-    hero = this.physics.add.sprite(50,400, 'hero');
+    hero = this.physics.add.sprite(50,this.sys.game.config.height - 100, 'hero');
     hero.setBounce(0.1);
     //hero.setCollideWorldBounds(true);
     hero.setScale(0.5);
@@ -108,6 +108,7 @@ mainScene.create = function() {
     // AJUSTANDO A COLISÃO DO HERO COM AS PLATAFORMAS // 
     this.physics.add.collider(hero, plataforms);
     this.physics.add.collider(hero, spikes, death, null, this);
+    this.physics.add.overlap(hero, porta, vitoria, null, this);
 };
 
 mainScene.update = function() {
@@ -143,8 +144,6 @@ mainScene.update = function() {
         if (this.direction == 'right') {
             hero.setVelocityY(-300);
             hero.anims.play('jump-right', true);
-            console.log(hero.body.y)
-            console.log(this.sys.game.config.height)
         } else {
             hero.setVelocityY(-300);
             hero.anims.play('jump-left', true);
@@ -169,6 +168,11 @@ mainScene.gameOver = function() {
     }, [], this);
 };
 
-function death (hero, spikes){
+function death (){
+    this.physics.pause();
     this.gameOver();
+};
+
+function vitoria() {
+    this.scene.start('win')
 }
